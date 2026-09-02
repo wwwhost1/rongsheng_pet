@@ -1,0 +1,11 @@
+# Repository metadata is needed by the build system only; never upload it as a site asset.
+.git
+.git/**
+**/.git
+**/.git/**
+
+# Local development and deployment metadata.
+.wrangler
+.wrangler/**
+node_modules
+node_modules/**
