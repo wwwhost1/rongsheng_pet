@@ -115,9 +115,13 @@
 
   function renderProducts() {
     const matches = filteredProducts();
+    const hasMore = matches.length > state.visible;
     elements.list.innerHTML = matches.slice(0, state.visible).map(productCard).join('');
     elements.noProducts.hidden = matches.length !== 0;
-    elements.loadMore.hidden = matches.length <= state.visible;
+    elements.loadMore.hidden = false;
+    elements.loadMore.disabled = !hasMore;
+    elements.loadMore.textContent = hasMore ? 'Load More Products' : 'No More Products';
+    elements.loadMore.setAttribute('aria-disabled', String(!hasMore));
     elements.result.textContent = `Showing ${matches.length} product${matches.length === 1 ? '' : 's'}`;
     renderTabs();
   }

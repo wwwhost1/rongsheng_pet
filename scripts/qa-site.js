@@ -52,9 +52,15 @@ async function run() {
   const desktop = await evaluate(`({ noOverflow: document.documentElement.scrollWidth <= window.innerWidth, homeCategories: document.querySelectorAll('.home-product[data-home-category]').length, leatherSection: Boolean(document.querySelector('#leather-collection')) })`);
   const desktopCapture = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   fs.writeFileSync(path.join(projectRoot, 'assets', 'v3-category-preview.png'), Buffer.from(desktopCapture.data, 'base64'));
+  const pagination = await evaluate(`(() => {
+    const button = document.querySelector('#load-products');
+    let clicks = 0;
+    while (!button.disabled && clicks < 20) { button.click(); clicks += 1; }
+    return { text: button.textContent.trim(), disabled: button.disabled, clicks, rendered: document.querySelectorAll('.product-item').length };
+  })()`);
   const firstCollarIsLeather = await evaluate(`(() => { document.querySelector('[data-category="collars"]').click(); const first = document.querySelector('.product-item h3')?.textContent || ''; const material = document.querySelector('.product-material')?.textContent || ''; return /leather/i.test(first + ' ' + material); })()`);
-  const report = { mobile, homeCategory, modal, desktop, firstCollarIsLeather }; console.log(JSON.stringify(report, null, 2));
-  const passed = mobile.categories === 4 && mobile.products === 12 && mobile.homeCategories === 3 && mobile.homeImagesLoaded && mobile.mailLinks >= 5 && !mobile.hasPrice && !mobile.hasVideo && !mobile.hasQuoteDrawer && !mobile.hasMoq && mobile.noOverflow && !mobile.hasChinese && homeCategory.activeTab === 'Dog Collars' && !homeCategory.modalOpen && modal.open && modal.specs === 7 && !modal.hasPrice && !modal.hasMoq && modal.mailto.startsWith('mailto:') && desktop.noOverflow && desktop.homeCategories === 3 && !desktop.leatherSection && firstCollarIsLeather;
+  const report = { mobile, homeCategory, modal, desktop, pagination, firstCollarIsLeather }; console.log(JSON.stringify(report, null, 2));
+  const passed = mobile.categories === 4 && mobile.products === 12 && mobile.homeCategories === 3 && mobile.homeImagesLoaded && mobile.mailLinks >= 5 && !mobile.hasPrice && !mobile.hasVideo && !mobile.hasQuoteDrawer && !mobile.hasMoq && mobile.noOverflow && !mobile.hasChinese && homeCategory.activeTab === 'Dog Collars' && !homeCategory.modalOpen && modal.open && modal.specs === 7 && !modal.hasPrice && !modal.hasMoq && modal.mailto.startsWith('mailto:') && desktop.noOverflow && desktop.homeCategories === 3 && !desktop.leatherSection && pagination.text === 'No More Products' && pagination.disabled && pagination.rendered > 12 && firstCollarIsLeather;
   socket.close(); if (!passed) process.exitCode = 1;
 }
 run().catch((error) => { console.error(error); process.exitCode = 1; });
