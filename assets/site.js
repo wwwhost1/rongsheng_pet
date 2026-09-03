@@ -34,7 +34,6 @@
     categoryBanners: document.querySelector('#category-banners'),
     tabs: document.querySelector('#product-tabs'),
     list: document.querySelector('#product-list'),
-    result: document.querySelector('#product-result'),
     noProducts: document.querySelector('#no-products'),
     loadMore: document.querySelector('#load-products'),
     search: document.querySelector('#product-search'),
@@ -122,7 +121,6 @@
     elements.loadMore.disabled = !hasMore;
     elements.loadMore.textContent = hasMore ? 'Load More Products' : 'No More Products';
     elements.loadMore.setAttribute('aria-disabled', String(!hasMore));
-    elements.result.textContent = `Showing ${matches.length} product${matches.length === 1 ? '' : 's'}`;
     renderTabs();
   }
 
