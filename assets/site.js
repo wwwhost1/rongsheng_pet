@@ -22,9 +22,9 @@
   ];
   const categoryByKey = Object.fromEntries(categories.map((category) => [category.key, category]));
   const homeCategoryImages = {
-    bags: 'assets/main-pet-bags-v3.png',
-    collars: 'assets/main-leather-collars-v2.png',
-    clothes: 'assets/main-pet-clothes-v3.png'
+    bags: 'assets/main-pet-bags-v5.png',
+    collars: 'assets/main-leather-collars-v4.png',
+    clothes: 'assets/main-pet-clothes-v5.png'
   };
   const mailHref = 'mailto:sales@rongshengleather.com.cn?subject=Pet%20Product%20Inquiry';
   const state = { category: 'all', search: '', sort: 'featured', visible: 12, activeProduct: null };
